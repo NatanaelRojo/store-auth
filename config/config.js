@@ -9,6 +9,7 @@ const URI = `postgres://${user}:${password}@${dbHost}:${dbPort}/${dbName}`;
 
 const config = {
   dbUrl: URI,
+  apiKey: process.env.API_KEY,
 };
 
 module.exports = { config };
