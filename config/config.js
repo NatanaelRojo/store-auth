@@ -1,10 +1,14 @@
 require('dotenv').config();
 
+const dbPort = process.env.DB_PORT;
+const dbHost = process.env.DB_HOST;
+const dbName = process.env.DB_NAME;
+const user = encodeURIComponent(process.env.DB_USER);
+const password = encodeURIComponent(process.env.DB_PASSWORD);
+const URI = `postgres://${user}:${password}@${dbHost}:${dbPort}/${dbName}`;
+
 const config = {
-  env: process.env.NODE_ENV || 'dev',
-  isProd: process.env.NODE_ENV === 'production',
-  port: process.env.PORT || 3000,
-  dbUrl: process.env.DATABASE_URL,
-}
+  dbUrl: URI,
+};
 
 module.exports = { config };
