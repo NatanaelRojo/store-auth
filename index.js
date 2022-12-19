@@ -8,7 +8,7 @@ const {
   boomErrorHandler,
   ormErrorHandler,
 } = require('./middlewares/error.handler');
-const checkApiKey = require('./middlewares/auh.handler');
+const { checkApiKey } = require('./middlewares/auh.handler');
 
 const app = express();
 const port = process.env.PORT || 3000;
