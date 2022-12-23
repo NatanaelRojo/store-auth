@@ -24,7 +24,8 @@ class OrderService {
   }
 
   async find() {
-    return [];
+    const orders = await models.Order.findAll();
+    return orders;
   }
 
   async findOne(id) {
@@ -37,18 +38,25 @@ class OrderService {
         'items',
       ],
     });
+    if (!order) {
+      throw boom.notFound('Order not found');
+    }
+    delete order.customer.user.dataValues.password;
+    delete order.customer.user.dataValues.recoveryToken;
     return order;
   }
 
   async update(id, changes) {
-    return {
-      id,
-      changes,
-    };
+    const order = await this.findOne(id);
+    const updatedOrder = await order.update(changes);
+    return updatedOrder;
   }
 
   async delete(id) {
-    return { id };
+    const order = await this.findOne(id);
+    const deletedOrderId = order.id;
+    await order.destroy();
+    return deletedOrderId;
   }
 }
 

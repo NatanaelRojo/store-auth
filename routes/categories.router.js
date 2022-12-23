@@ -34,8 +34,8 @@ router.get(
   validatorHandler(getCategorySchema, 'params'),
   async (req, res, next) => {
     try {
-      const { id } = req.params;
-      const category = await service.findOne(id);
+      const categoryId = parseInt(req.params.id, 10);
+      const category = await service.findOne(categoryId);
       res.json(category);
     } catch (error) {
       next(error);
@@ -65,10 +65,10 @@ router.patch(
   validatorHandler(updateCategorySchema, 'body'),
   async (req, res, next) => {
     try {
-      const { id } = req.params;
+      const categoryId = parseInt(req.params.id, 10);
       const body = req.body;
-      const category = await service.update(id, body);
-      res.json(category);
+      const updatedCategory = await service.update(categoryId, body);
+      res.json(updatedCategory);
     } catch (error) {
       next(error);
     }
@@ -80,9 +80,9 @@ router.delete(
   validatorHandler(getCategorySchema, 'params'),
   async (req, res, next) => {
     try {
-      const { id } = req.params;
-      await service.delete(id);
-      res.status(201).json({ id });
+      constcategoryId = parseInt(req.params.id, 10);
+      const deletedCategoryId = await service.delete(categoryId);
+      res.json(deletedCategoryId);
     } catch (error) {
       next(error);
     }

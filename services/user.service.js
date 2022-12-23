@@ -17,10 +17,10 @@ class UserService {
   }
 
   async find() {
-    const rta = await models.User.findAll({
+    const users = await models.User.findAll({
       include: ['customer'],
     });
-    return rta;
+    return users;
   }
 
   async findOne(id) {
@@ -28,6 +28,8 @@ class UserService {
     if (!user) {
       throw boom.notFound('user not found');
     }
+    delete user.dataValues.password;
+    delete user.dataValues.recoveryToken;
     return user;
   }
 
@@ -35,19 +37,21 @@ class UserService {
     const user = models.User.findOne({
       where: { email },
     });
+    delete user.dataValues.password;
+    delete user.dataValues.recoveryToken;
     return user;
   }
 
   async update(id, changes) {
     const user = await this.findOne(id);
-    const rta = await user.update(changes);
-    return rta;
+    const updatedUser = await user.update(changes);
+    return updatedUser;
   }
 
   async delete(id) {
     const user = await this.findOne(id);
-    await user.destroy();
-    return { id };
+    const deletedUserId = await user.destroy();
+    return deletedUserId;
   }
 }
 

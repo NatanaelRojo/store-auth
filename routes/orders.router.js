@@ -11,13 +11,22 @@ const {
 const router = express.Router();
 const service = new OrderService();
 
+router.get('/', async (req, res, next) => {
+  try {
+    const orders = await service.find();
+    res.json(orders);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get(
   '/:id',
   validatorHandler(getOrderSchema, 'params'),
   async (req, res, next) => {
     try {
-      const { id } = req.params;
-      const order = await service.findOne(id);
+      const orderId = parseInt(req.params, 10);
+      const order = await service.findOne(orderId);
       res.json(order);
     } catch (error) {
       next(error);
@@ -47,6 +56,20 @@ router.post(
       const body = req.body;
       const newItem = await service.addItem(body);
       res.status(201).json(newItem);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.delete(
+  '/:id',
+  validatorHandler(getOrderSchema, 'params'),
+  async (req, res, next) => {
+    try {
+      const orderId = parseInt(req.params.id, 10);
+      const deletedOrderId = await service.delete(orderId);
+      res.json(deletedOrderId);
     } catch (error) {
       next(error);
     }
